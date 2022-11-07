@@ -15,12 +15,13 @@ class ProductCard extends StatelessWidget {
   }) : super(key: key);
 
   final double width, aspectRetio;
-  final Product product;
+  final ProductModel product;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: getProportionateScreenWidth(20)),
+    print(width);
+    return Container(
+      padding: EdgeInsets.all(getProportionateScreenWidth(7)),
       child: SizedBox(
         width: getProportionateScreenWidth(width),
         child: GestureDetector(

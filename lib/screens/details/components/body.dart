@@ -9,7 +9,7 @@ import 'top_rounded_container.dart';
 import 'product_images.dart';
 
 class Body extends StatelessWidget {
-  final Product product;
+  final ProductModel product;
 
   const Body({Key? key, required this.product}) : super(key: key);
 

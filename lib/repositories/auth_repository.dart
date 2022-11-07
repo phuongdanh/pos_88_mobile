@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:shop_app/config/secure_storage.dart';
 import 'package:shop_app/constants.dart';
+import 'package:shop_app/models/User.dart';
 import 'package:shop_app/repositories/repository.dart';
 
 /// State of user
@@ -17,8 +19,18 @@ class UserRepository extends Repository {
     }
   }
 
-  Future login(Map<String, String> inputData) async {
+  Future<bool> login(Map<String, String> inputData) async {
     await this.makePost(API_URL+'/admin/login', inputData: inputData);
-    print(this.responseData.data);
+    if (this.responseSuccess()) {
+      try {
+        print(this.getResponse().data);
+        UserModel user = UserModel.fromJson(this.getResponse().data);
+        setLoggedUser(user);
+        return true;
+      } catch (err) {
+        print(err.toString());
+      }
+    }
+    return false;
   }
 }

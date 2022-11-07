@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shop_app/config/secure_storage.dart';
 import 'package:shop_app/constants.dart';
+import 'package:shop_app/screens/home/home_screen.dart';
 import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
 import 'package:shop_app/size_config.dart';
 
@@ -29,6 +31,20 @@ class _BodyState extends State<Body> {
       "image": "assets/images/splash_3.png"
     },
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _checkUser();
+  }
+
+  _checkUser() async {
+    var currentUser = await getLoggedUser();
+    if (currentUser != null) {
+      Navigator.pushNamedAndRemoveUntil(context, HomeScreen.routeName, (route) => false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

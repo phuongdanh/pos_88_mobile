@@ -4,6 +4,8 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
+import 'package:shop_app/config/secure_storage.dart';
+import 'package:shop_app/models/User.dart';
 
 class Repository {
 
@@ -18,8 +20,8 @@ class Repository {
     print(postData);
     Map<String, String> headers = {"Content-type": "application/json", "Accept": "application/json"};
     if (requiredToken) {
-      // String? accessToken = await this.getAccessToken();
-      // headers['Authorization'] = 'Bearer $accessToken';
+      String? accessToken = await this.getAccessToken();
+      headers['Authorization'] = 'Bearer $accessToken';
     }
     try {
       http.Response response = await http.post(Uri.parse(url), headers: headers, body: postData);
@@ -31,15 +33,14 @@ class Repository {
     }
   }
 
-  Future makeGet({required String url, dynamic parames, bool requiredToken: true}) async {
-    print('get $url');
+  Future makeGet(String url, {dynamic parames, bool requiredToken: true}) async {
     if (url.substring(url.length - 1) == '/') {
       url = url.substring(0, url.length - 1);
     }
     Map<String, String> headers = {"Content-type": "application/json", "Accept": "application/json"};
     if (requiredToken) {
-      // String? accessToken = await this.getAccessToken();
-      // headers['Authorization'] = 'Bearer $accessToken';
+      String? accessToken = await this.getAccessToken();
+      headers['Authorization'] = 'Bearer $accessToken';
     }
 
     try {
@@ -58,8 +59,8 @@ class Repository {
     String postData = json.encode(inputData);
     Map<String, String> headers = {"Content-type": "application/json", "Accept": "application/json"};
     if (requiredToken) {
-      // String? accessToken = await this.getAccessToken();
-      // headers['Authorization'] = 'Bearer $accessToken';
+      String? accessToken = await this.getAccessToken();
+      headers['Authorization'] = 'Bearer $accessToken';
     }
     try {
       http.Response response = await http.put(Uri.parse(url), headers: headers, body: postData);
@@ -75,8 +76,8 @@ class Repository {
     }
     Map<String, String> headers = {"Content-type": "application/json", "Accept": "application/json"};
     if (requiredToken) {
-      // String? accessToken = await this.getAccessToken();
-      // headers['Authorization'] = 'Bearer $accessToken';
+      String? accessToken = await this.getAccessToken();
+      headers['Authorization'] = 'Bearer $accessToken';
     }
     try {
       http.Response response = await http.delete(Uri.parse(url), headers: headers);
@@ -111,8 +112,8 @@ class Repository {
     }
     request.headers["Accept"] = "application/json";
     if (requiredToken) {
-      // String? accessToken = await this.getAccessToken();
-      // request.headers['Authorization'] = 'Bearer $accessToken';
+      String? accessToken = await this.getAccessToken();
+      request.headers['Authorization'] = 'Bearer $accessToken';
     }
     try {
       var streamedResponse = await request.send();
@@ -127,16 +128,27 @@ class Repository {
 
   setResponse(http.Response response) {
     Map<String, dynamic> body = jsonDecode(response.body);
-    this.responseData = new ResponseData(response.statusCode, body);
+    this.responseData = new ResponseData(response.statusCode, body["data"]);
+  }
+
+  ResponseData getResponse() {
+    return this.responseData;
   }
 
   bool responseSuccess() {
-    // if (this.getResponse()!.statusCode <= 299 &&
-    //     this.getResponse()!.statusCode >= 200 &&
-    //     this.getResponse()!.success == true) {
-    //   return true;
-    // }
+    if (this.getResponse().statusCode <= 299 &&
+        this.getResponse().statusCode >= 200) {
+      return true;
+    }
     return false;
+  }
+
+  Future<String> getAccessToken() async {
+    UserModel? loggedUser = await getLoggedUser();
+    if (loggedUser == null) {
+      return "";
+    }
+    return loggedUser.token;
   }
 
   handleSocketException() {
