@@ -7,6 +7,7 @@ import 'package:shop_app/repositories/repository.dart';
 class ProductRepository extends Repository {
   Future<List<ProductModel>?> getList(Map<String, String> params) async {
     await this.makeGet(API_URL+'/admin/products', parames: params);
+    print(this.responseData);
     if (this.responseSuccess()) {
       List<ProductModel> items = [];
       for (var item in this.getResponse().data) {

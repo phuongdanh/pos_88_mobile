@@ -12,12 +12,13 @@ class UserModel {
   UserModel({required this.id, required this.userName, this.name, this.email, this.companyId, required this.token});
 
   factory UserModel.fromJson(Map<dynamic, dynamic> parsedJson) {
+    print(parsedJson);
     return new UserModel(
       id: Util.getString(parsedJson['user_id'])??"",
-      name: Util.getString(parsedJson['name']),
-      userName: Util.getString(parsedJson['name'])!,
-      email: Util.getString(parsedJson['email']),
-      companyId: Util.getString(parsedJson['company_id']),
+      name: Util.getString(parsedJson['name'])??"",
+      userName: Util.getString(parsedJson['user_name'])??"",
+      email: Util.getString(parsedJson['email'])??"",
+      companyId: Util.getString(parsedJson['company_id'])??"",
       token: Util.getString(parsedJson['token'])??""
     );
   }

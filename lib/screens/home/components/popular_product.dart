@@ -30,7 +30,9 @@ class PopularProducts extends StatelessWidget {
                   if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   }
-                  print(snapshot.data!.length);
+                  if (snapshot.data == null) {
+                    return Text('Error: ${snapshot.error}');
+                  }
                   return SingleChildScrollView(
                     padding: EdgeInsets.only(left: 0, right: 0),
                     scrollDirection: Axis.vertical,

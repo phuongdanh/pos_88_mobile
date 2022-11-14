@@ -18,7 +18,10 @@ Future<UserModel?> getLoggedUser() async {
   }
 }
 
-setLoggedUser(UserModel value) {
-  secureStorage.write(key: "loggedUser", value: json.encode(value));
+setLoggedUser(UserModel? value) {
+  if (value == null) {
+    secureStorage.delete(key: "loggedUser");
+  } else {
+    secureStorage.write(key: "loggedUser", value: json.encode(value));
+  }
 }
-

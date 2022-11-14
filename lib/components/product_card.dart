@@ -19,7 +19,6 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(width);
     return Container(
       padding: EdgeInsets.all(getProportionateScreenWidth(7)),
       child: SizedBox(
@@ -43,7 +42,7 @@ class ProductCard extends StatelessWidget {
                   ),
                   child: Hero(
                     tag: product.id.toString(),
-                    child: Image.asset(product.images[0]),
+                    child: product.image != "" ? Image.network(product.image) : Image.asset(DEFAULT_PRODUCT_IMAGE),
                   ),
                 ),
               ),

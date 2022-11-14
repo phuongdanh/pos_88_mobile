@@ -17,7 +17,6 @@ class Repository {
       url = url.substring(0, url.length - 1);
     }
     String postData = json.encode(inputData);
-    print(postData);
     Map<String, String> headers = {"Content-type": "application/json", "Accept": "application/json"};
     if (requiredToken) {
       String? accessToken = await this.getAccessToken();
@@ -25,6 +24,7 @@ class Repository {
     }
     try {
       http.Response response = await http.post(Uri.parse(url), headers: headers, body: postData);
+      print(response.body);
       this.setResponse(response);
     } on SocketException catch (ex) {
       print(ex.message);
@@ -41,10 +41,12 @@ class Repository {
     if (requiredToken) {
       String? accessToken = await this.getAccessToken();
       headers['Authorization'] = 'Bearer $accessToken';
+      print(headers);
     }
 
     try {
       http.Response response = await http.get(Uri.parse(url), headers: headers);
+      print(response.body);
       this.setResponse(response);
     } on SocketException catch (e) {
       // this.responseData = this.handleSocketException();

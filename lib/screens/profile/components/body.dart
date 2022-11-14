@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shop_app/repositories/auth_repository.dart';
+import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
 
 import 'profile_menu.dart';
 import 'profile_pic.dart';
 
 class Body extends StatelessWidget {
+  final UserRepository _userRepository = new UserRepository();
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -35,7 +38,11 @@ class Body extends StatelessWidget {
           ProfileMenu(
             text: "Log Out",
             icon: "assets/icons/Log out.svg",
-            press: () {},
+            press: () async {
+              await _userRepository.logout();
+              Navigator.pushReplacementNamed(context, SignInScreen.routeName);
+              return;
+            },
           ),
         ],
       ),

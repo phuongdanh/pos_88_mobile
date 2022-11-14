@@ -5,6 +5,7 @@ class ProductModel {
   final String id;
   final String title, description;
   final List<String> images;
+  final String image;
   final List<Color> colors;
   final double rating, price;
   final bool isFavourite;
@@ -13,6 +14,7 @@ class ProductModel {
     required this.id,
     required this.images,
     required this.colors,
+    required this.image,
     this.rating = 0.0,
     this.isFavourite = false,
     required this.title,
@@ -26,6 +28,7 @@ class ProductModel {
       title: Util.getString(parsedJson['name'])!,
       price: Util.getDouble(parsedJson['price'])!,
       description: Util.getString(parsedJson['name'])!,
+      image: Util.productImage(parsedJson['image']),
       images: [
         "assets/images/ps4_console_white_1.png",
         "assets/images/ps4_console_white_2.png",
@@ -47,6 +50,7 @@ class ProductModel {
 List<ProductModel> demoProducts = [
   ProductModel(
     id: '1',
+    image: "assets/images/ps4_console_white_1.png",
     images: [
       "assets/images/ps4_console_white_1.png",
       "assets/images/ps4_console_white_2.png",
@@ -66,6 +70,7 @@ List<ProductModel> demoProducts = [
     isFavourite: true,
   ),
   ProductModel(
+    image: "assets/images/ps4_console_white_1.png",
     id: '2',
     images: [
       "assets/images/Image Popular Product 2.png",
@@ -82,6 +87,7 @@ List<ProductModel> demoProducts = [
     rating: 4.1,
   ),
   ProductModel(
+    image: "assets/images/ps4_console_white_1.png",
     id: '3',
     images: [
       "assets/images/glap.png",

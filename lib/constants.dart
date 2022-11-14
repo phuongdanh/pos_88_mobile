@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/size_config.dart';
 
-const API_URL = "http://192.168.1.8:3002";
+const API_URL = "http://192.168.1.8:3001";
+const DEFAULT_PRODUCT_IMAGE = "assets/images/ps4_console_white_1.png";
 
 const kPrimaryColor = Color(0xFF00BCD4);
 const kPrimaryLightColor = Color(0xFFFFECDF);

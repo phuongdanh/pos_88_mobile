@@ -12,11 +12,19 @@ import 'package:shop_app/repositories/repository.dart';
 enum UserState { LOGGED_IN, GUEST, TOKEN_EXPIRED }
 
 class UserRepository extends Repository {
-  Future register(Map<String, String> inputData) async {
+  Future<bool> register(Map<String, String> inputData) async {
     await this.makePost(API_URL+'/admin/register', inputData: inputData);
     if (this.responseSuccess()) {
-      print(this.responseSuccess());
+      try {
+        print(this.getResponse().data);
+        UserModel user = UserModel.fromJson(this.getResponse().data);
+        setLoggedUser(user);
+        return true;
+      } catch (err) {
+        print(err.toString());
+      }
     }
+    return false;
   }
 
   Future<bool> login(Map<String, String> inputData) async {
@@ -32,5 +40,16 @@ class UserRepository extends Repository {
       }
     }
     return false;
+  }
+
+  Future<void> logout() async {
+    await this.makePost(API_URL+'/admin/logout', inputData: {});
+    if (this.responseSuccess()) {
+      try {
+        setLoggedUser(null);
+      } catch (err) {
+        print(err.toString());
+      }
+    }
   }
 }

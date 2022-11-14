@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:shop_app/components/custom_surfix_icon.dart';
 import 'package:shop_app/components/default_button.dart';
 import 'package:shop_app/components/form_error.dart';
+import 'package:shop_app/helper/keyboard.dart';
+import 'package:shop_app/repositories/auth_repository.dart';
 import 'package:shop_app/screens/complete_profile/complete_profile_screen.dart';
+import 'package:shop_app/screens/login_success/login_success_screen.dart';
 
 import '../../../constants.dart';
 import '../../../size_config.dart';
@@ -15,10 +18,12 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
+  final UserRepository _userRepository = new UserRepository();
   String? email;
+  String? username;
   String? password;
   bool remember = false;
-  final List<String?> errors = [];
+  List<String?> errors = [];
 
   void addError({String? error}) {
     if (!errors.contains(error))
@@ -42,18 +47,31 @@ class _SignUpFormState extends State<SignUpForm> {
         children: [
           buildUserNameFormField(),
           SizedBox(height: getProportionateScreenHeight(30)),
-          buildEmailFormField(),
-          SizedBox(height: getProportionateScreenHeight(30)),
+          // buildEmailFormField(),
+          // SizedBox(height: getProportionateScreenHeight(30)),
           buildPasswordFormField(),
           FormError(errors: errors),
           SizedBox(height: getProportionateScreenHeight(40)),
           DefaultButton(
-            text: "Continue",
-            press: () {
+            text: "Sign up",
+            press: () async {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
-                // if all are valid then go to success screen
-                Navigator.pushNamed(context, CompleteProfileScreen.routeName);
+                if (_formKey.currentState!.validate()) {
+                _formKey.currentState!.save();
+                KeyboardUtil.hideKeyboard(context);
+                var successed = await _userRepository.register({
+                  "user_name": username!,
+                  "password": password!,
+                });
+                if (successed) {
+                  Navigator.pushNamed(context, LoginSuccessScreen.routeName);
+                  return;
+                }
+                setState(() {
+                  errors = [("Please try with another username")];
+                });
+              }
               }
             },
           ),
@@ -126,8 +144,8 @@ class _SignUpFormState extends State<SignUpForm> {
 
   TextFormField buildUserNameFormField() {
     return TextFormField(
-      keyboardType: TextInputType.emailAddress,
-      onSaved: (newValue) => email = newValue,
+      keyboardType: TextInputType.text,
+      onSaved: (newValue) => username = newValue,
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kUserNameNullError);

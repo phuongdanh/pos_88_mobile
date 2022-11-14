@@ -1,3 +1,5 @@
+import 'package:shop_app/constants.dart';
+
 class Util {
   static int? getInt(dynamic value, [int? defaultValue]) {
     if (value is bool) {
@@ -41,5 +43,12 @@ class Util {
 
   static Map<dynamic, dynamic> getMap(value, [Map<dynamic, dynamic>? defaultValue]) {
     return value != null ? value : defaultValue;
+  }
+
+  static String productImage(String? value) {
+    if (getString(value) == null) {
+      return "";
+    }
+    return API_URL+"/"+value!;
   }
 }
